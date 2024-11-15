@@ -31,7 +31,7 @@ hbar = 1/(2*pi) * 6.62607015e-34 # [m^2.kg.s^-1]
 m = 9.10938371e-31 # [kg]
 e = 1.60217663e-19 # [C]
 e0 = 8.85418782e-12 # [C^2.kg^-1.m^-3.s^2]
-J_to_eV = 6.241509e18 # [J/eV]
+J_to_eV = 6.241509e18 # [eV/J]
 # hbar = 1
 # m = 1
 # e = 1
@@ -85,7 +85,7 @@ H = torch.sparse_coo_tensor(indices=inds, values=vals, size=H.shape).to(device)
 
 ## Now we have everything we need in order to determine the eigenvalues & eigenvectors using lobpcg:
 # total_modes = int(input('How many (integer) orbital modes would you like to compute? \n'))
-total_modes = 101
+total_modes = 6
 E_vals, E_vecs = lobpcg(H, k=total_modes, largest=False) # 'k' determines how many eigens you would like to return,
                                                # and 'largest=False' ensures we return the smallest eigens first
                  
@@ -98,7 +98,7 @@ def get_ev(amount): # This returns the n'th lowest eigenvector.
 ## Now we can plot these eigenvectors, which correspond to the energies:
 from skimage import measure
 # mode = int(input('What orbital mode (integer) would you like? \n'))
-for i in range(0,total_modes, int(total_modes/20)):
+for i in range(0,total_modes): # int(total_modes/6)
     # print(get_ev(mode)**2)
     vertices, faces, _, _, = measure.marching_cubes(get_ev(i)**2, level=1e-6) # This creates an iso-surface; a 2D surface in 3D,
                                                                                                 # that corresponds to a chosen value.
